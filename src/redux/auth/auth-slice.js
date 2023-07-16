@@ -5,8 +5,8 @@ const initialState = {
   user: { name: null, email: null },
   token: null,
   isLoggedIn: false,
-    isFetchingCurrentUser: false,
-    isAuthError: false,
+  isFetchingCurrentUser: false,
+  isAuthError: false,
 };
 
 const authSlice = createSlice({
@@ -40,7 +40,8 @@ const authSlice = createSlice({
       state.isFetchingCurrentUser = true;
     },
     [authOperations.fetchCurrentUser.fulfilled](state, action) {
-      state.user = { ...action.payload };
+      state.user.name = action.payload.name;
+      state.user.email = action.payload.email;
       state.isLoggedIn = true;
       state.isFetchingCurrentUser = false;
     },
@@ -51,6 +52,6 @@ const authSlice = createSlice({
   },
 });
 
+
+
 export const authReducer = authSlice.reducer;
-
-

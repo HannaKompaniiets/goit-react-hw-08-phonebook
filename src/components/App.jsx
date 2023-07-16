@@ -9,7 +9,6 @@ import Loader from './Loader/Loader';
 import { PrivateRoute } from './appBar/PrivateRoute';
 import Layout from './Layout/Layout';
 
-
 const HomePage = lazy(() => import('../pages/Home'));
 const LoginPage = lazy(() => import('../pages/Login'));
 const ContactsPage = lazy(() => import('../pages/Contacts'));
@@ -17,7 +16,9 @@ const RegisterPage = lazy(() => import('../pages/SignUp'));
 
 function App() {
   const dispatch = useDispatch();
-  const isfetchCurrentUser = useSelector(authSelectors.getIsFetchingCurrentUser);
+  const isfetchCurrentUser = useSelector(
+    authSelectors.getIsFetchingCurrentUser
+  );
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -32,14 +33,10 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<HomePage />} />
               <Route
-                path="/contacts"
-                element={<PrivateRoute component={<ContactsPage />} />}
-              />
-              <Route
                 path="/users/signup"
                 element={
                   <RestrictedRoute
-                    redirectTo="/contacts"
+                    redirectTo="/users/login"
                     component={<RegisterPage />}
                   />
                 }
@@ -50,6 +47,15 @@ function App() {
                   <RestrictedRoute
                     redirectTo="/contacts"
                     component={<LoginPage />}
+                  />
+                }
+              />
+              <Route
+                path="/contacts"
+                element={
+                  <PrivateRoute
+                    redirectTo="/users/login"
+                    component={<ContactsPage />}
                   />
                 }
               />
