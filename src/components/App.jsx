@@ -1,36 +1,57 @@
-import Form from './form/Form';
-import ContactList from './new_contact/ContactList';
-import Filter from './filter/Filter';
+import AppBar from './appBar/AppBar';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Contacts from 'pages/Contacts';
+import Home from 'pages/Home';
+import Login from 'pages/Login';
+import SignUp from 'pages/SignUp';
+import { fetchCurrentUser } from '../redux/auth/auth-operations';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectError,
-  selectFilteredContacts,
-  selectIsLoading,
-} from 'redux/selectors';
-import Loader from './Loader/Loader';
 import { useEffect } from 'react';
-import { fetchContacts } from 'redux/operations';
+import authSelectors from 'redux/auth/auth-selectors';
+import NotFound from 'pages/NotFound';
+import ProtectedRoute from './appBar/ProtectedRoute';
+import Loader from './Loader/Loader';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectFilteredContacts);
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
+  const isFetchitcCurrentUser = useSelector(
+    authSelectors.getIsFetchingCurrentUser
+  );
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(fetchCurrentUser());
   }, [dispatch]);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn, navigate]);
+
+   if (isFetchitcCurrentUser) {
+     return <Loader />;
+   }
+
   return (
-    <>
-      <h2>Phonebook</h2>
-      <Form />
-      {isLoading && <Loader />}
-      {error && <div>Oopps, something went wrong...{error.message}</div>}
-      <h2>Contacts</h2>
-      <Filter />
-      {contacts.length ? <ContactList /> : <p>Contact not found</p>}
-    </>
+    <div>
+        <AppBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Contacts />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/users/login" element={<Login />} />
+        <Route path="/users/signup" element={<SignUp />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
 };
 

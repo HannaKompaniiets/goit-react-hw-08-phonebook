@@ -110,3 +110,4 @@ jsx
 3. Dacă toți pașii sunt reușiți, versiunea de producție asamblată a fișierelor proiectului
    este trimisă la ramura gh-pages. În caz contrar, jurnalul de execuție al scriptului
    scriptului va indica care este problema.
+   
