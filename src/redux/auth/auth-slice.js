@@ -5,29 +5,38 @@ const initialState = {
   user: { name: null, email: null },
   token: null,
   isLoggedIn: false,
-  isFetchingCurrentUser: false,
+    isFetchingCurrentUser: false,
+    isAuthError: false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  extraredusers: {
+  extrareducers: {
     [authOperations.register.fulfilled](state, action) {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isLoggedIn = true;
+      state.isAuthError = false;
+    },
+    [authOperations.register.rejected](state, _action) {
+      state.isAuthError = true;
     },
     [authOperations.logIn.fulfilled](state, action) {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isLoggedIn = true;
+      state.isAuthError = false;
     },
-    [authOperations.logOut.fulfilled](state) {
+    [authOperations.logIn.rejected](state, _action) {
+      state.isAuthError = true;
+    },
+    [authOperations.logOut.fulfilled](state, _action) {
       state.user = { name: null, email: null };
       state.token = null;
       state.isLoggedIn = false;
     },
-    [authOperations.fetchCurrentUser.pending](state) {
+    [authOperations.fetchCurrentUser.pending](state, _action) {
       state.isFetchingCurrentUser = true;
     },
     [authOperations.fetchCurrentUser.fulfilled](state, action) {
@@ -36,8 +45,8 @@ const authSlice = createSlice({
       state.isFetchingCurrentUser = false;
     },
     [authOperations.fetchCurrentUser.rejected](state, action) {
-        state.isFetchingCurrentUser = false;
-         state.error = action.payload;
+      state.isFetchingCurrentUser = false;
+      state.error = action.payload;
     },
   },
 });

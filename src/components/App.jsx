@@ -1,58 +1,67 @@
-import AppBar from './appBar/AppBar';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Contacts from 'pages/Contacts';
-import Home from 'pages/Home';
-import Login from 'pages/Login';
-import SignUp from 'pages/SignUp';
+import { Route, Routes } from 'react-router-dom';
 import { fetchCurrentUser } from '../redux/auth/auth-operations';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, lazy } from 'react';
 import authSelectors from 'redux/auth/auth-selectors';
 import NotFound from 'pages/NotFound';
-import ProtectedRoute from './appBar/ProtectedRoute';
+import { RestrictedRoute } from './appBar/RestrictedRoute';
 import Loader from './Loader/Loader';
+import { PrivateRoute } from './appBar/PrivateRoute';
+import Layout from './Layout/Layout';
 
-export const App = () => {
+
+const HomePage = lazy(() => import('../pages/Home'));
+const LoginPage = lazy(() => import('../pages/Login'));
+const ContactsPage = lazy(() => import('../pages/Contacts'));
+const RegisterPage = lazy(() => import('../pages/SignUp'));
+
+function App() {
   const dispatch = useDispatch();
-  const isFetchitcCurrentUser = useSelector(
-    authSelectors.getIsFetchingCurrentUser
-  );
-  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
+  const isfetchCurrentUser = useSelector(authSelectors.getIsFetchingCurrentUser);
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/');
-    }
-  }, [isLoggedIn, navigate]);
-
-   if (isFetchitcCurrentUser) {
-     return <Loader />;
-   }
-
   return (
     <div>
-        <AppBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <Contacts />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/users/login" element={<Login />} />
-        <Route path="/users/signup" element={<SignUp />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      {!isfetchCurrentUser ? (
+        <>
+          {' '}
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route
+                path="/contacts"
+                element={<PrivateRoute component={<ContactsPage />} />}
+              />
+              <Route
+                path="/users/signup"
+                element={
+                  <RestrictedRoute
+                    redirectTo="/contacts"
+                    component={<RegisterPage />}
+                  />
+                }
+              />
+              <Route
+                path="/users/login"
+                element={
+                  <RestrictedRoute
+                    redirectTo="/contacts"
+                    component={<LoginPage />}
+                  />
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>{' '}
+        </>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
-};
+}
 
 export default App;

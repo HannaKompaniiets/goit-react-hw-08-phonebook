@@ -1,50 +1,60 @@
-import  { logIn } from '../redux/auth/auth-operations';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logIn } from '../redux/auth/auth-operations';
+import { useDispatch, useSelector } from 'react-redux';
+import authSelectors from 'redux/auth/auth-selectors';
+import { useState } from 'react';
 
 const Login = () => {
   const dispatch = useDispatch();
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  // const handleChange = ({ target: { name, value } }) => {
-  //   switch (name) {
-  //     case 'email':
-  //       return setEmail(value);
-  //     case 'password':
-  //       return setPassword(value);
-  //     default:
-  //       return;
-  //   }
-  // };
+  const isAuthError = useSelector(authSelectors.getIsAuthError);
 
-  const handleSubmit = e => {
+  const handleSignupNavigate = () => {
+    navigate('/users/signup');
+  };
+
+  const handleLogin = e => {
     e.preventDefault();
-    const form = e.currentTarget;
-    dispatch(
-      logIn({
-        email: form.elements.email.value,
-        password: form.elements.password.value,
-      })
-    );
-    form.reset();
+    dispatch(logIn({ email, password }));
+    setEmail('');
+    setPassword('');
   };
 
   return (
     <div>
       <h1> Please login!</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <label>
           {' '}
           Enter your email
-          <input type="email" name="email"></input>
+          <input
+            type="email"
+            name="email"
+            placeholder="Please enter your email"
+            value={email}
+            onChange={event => setEmail(event.target.value)}
+          ></input>
         </label>
         <label>
           Enter your password
-          <input type="password" name="password"></input>
+          <input
+            type="password"
+            name="password"
+            placeholder="Please enter your password"
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+          ></input>
         </label>
-        <button type="button">Login</button>
+        <button type="submit">Login</button>
+        {isAuthError && <div>Error occurred while logging in</div>}
       </form>
+      <button type="button" onClick={handleSignupNavigate}>
+        Go to register page
+      </button>
     </div>
   );
 };
