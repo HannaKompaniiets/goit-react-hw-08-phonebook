@@ -1,6 +1,6 @@
 import { React} from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import authSelectors from 'redux/auth/auth-selectors';
 import styled from 'styled-components';
 
@@ -19,7 +19,8 @@ const Navigation = () => {
     <nav>
       <StyledLink to="/">Home</StyledLink>
       {isLoggedIn && <StyledLink to="/contacts">Contacts</StyledLink>}
-    </nav>
+      </nav>
+      
   );
 };
 export default Navigation;
