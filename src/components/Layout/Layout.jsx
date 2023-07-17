@@ -1,11 +1,20 @@
 import { Outlet } from 'react-router-dom';
 import { Suspense } from 'react';
-import AppBar from 'components/appBar/AppBar';
+import css from './Layout.module.css'
+
+import Grid from '@mui/material/Grid'; 
+import { Container } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import AppBarMenu from 'components/appBar/AppBarMenu';
 
 const Layout = () => {
   return (
-    <div>
-      <AppBar />
+    <div className={css.menu}>
+      <AppBar color="secondary" position="static">
+        <Container maxWidth="m">
+          <AppBarMenu />
+        </Container>
+      </AppBar>
       <Suspense fallback={null}>
         <Outlet />
       </Suspense>

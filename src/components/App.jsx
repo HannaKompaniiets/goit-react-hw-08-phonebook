@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, createBrowserRouter } from 'react-router-dom';
 import { fetchCurrentUser } from '../redux/auth/auth-operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, lazy } from 'react';
@@ -8,6 +8,7 @@ import { RestrictedRoute } from './appBar/RestrictedRoute';
 import Loader from './Loader/Loader';
 import { PrivateRoute } from './appBar/PrivateRoute';
 import Layout from './Layout/Layout';
+import { Container } from '@mui/material';
 
 const HomePage = lazy(() => import('../pages/Home'));
 const LoginPage = lazy(() => import('../pages/Login'));
@@ -16,7 +17,7 @@ const RegisterPage = lazy(() => import('../pages/SignUp'));
 
 function App() {
   const dispatch = useDispatch();
-  const isfetchCurrentUser = useSelector(
+  const isFetchCurrentUser = useSelector(
     authSelectors.getIsFetchingCurrentUser
   );
 
@@ -26,46 +27,48 @@ function App() {
 
   return (
     <div>
-      {!isfetchCurrentUser ? (
-        <>
-          {' '}
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<HomePage />} />
-              <Route
-                path="/users/signup"
-                element={
-                  <RestrictedRoute
-                    redirectTo="/users/login"
-                    component={<RegisterPage />}
-                  />
-                }
-              />
-              <Route
-                path="/users/login"
-                element={
-                  <RestrictedRoute
-                    redirectTo="/contacts"
-                    component={<LoginPage />}
-                  />
-                }
-              />
-              <Route
-                path="/contacts"
-                element={
-                  <PrivateRoute
-                    redirectTo="/users/login"
-                    component={<ContactsPage />}
-                  />
-                }
-              />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>{' '}
-        </>
-      ) : (
-        <Loader />
-      )}
+      <Container maxWidth="xl">
+        {!isFetchCurrentUser ? (
+          <>
+            {' '}
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route
+                  path="/users/signup"
+                  element={
+                    <RestrictedRoute
+                      redirectTo="/contacts"
+                      component={<RegisterPage />}
+                    />
+                  }
+                />
+                <Route
+                  path="/users/login"
+                  element={
+                    <RestrictedRoute
+                      redirectTo="/contacts"
+                      component={<LoginPage />}
+                    />
+                  }
+                />
+                <Route
+                  path="/contacts"
+                  element={
+                    <PrivateRoute
+                      redirectTo="/login"
+                      component={<ContactsPage />}
+                    />
+                  }
+                />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>{' '}
+          </>
+        ) : (
+          <Loader />
+        )}
+      </Container>
     </div>
   );
 }

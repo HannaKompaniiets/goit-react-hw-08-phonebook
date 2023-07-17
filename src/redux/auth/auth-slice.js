@@ -12,7 +12,7 @@ const initialState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  extrareducers: {
+  extraReducers: {
     [authOperations.register.fulfilled](state, action) {
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -40,8 +40,7 @@ const authSlice = createSlice({
       state.isFetchingCurrentUser = true;
     },
     [authOperations.fetchCurrentUser.fulfilled](state, action) {
-      state.user.name = action.payload.name;
-      state.user.email = action.payload.email;
+      state.user = action.payload;
       state.isLoggedIn = true;
       state.isFetchingCurrentUser = false;
     },
@@ -51,7 +50,5 @@ const authSlice = createSlice({
     },
   },
 });
-
-
 
 export const authReducer = authSlice.reducer;

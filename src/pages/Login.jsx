@@ -1,20 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { logIn } from '../redux/auth/auth-operations';
-import { useDispatch, useSelector } from 'react-redux';
-import authSelectors from 'redux/auth/auth-selectors';
+import { useDispatch} from 'react-redux';
 import { useState } from 'react';
+import { Box, Button, TextField } from '@mui/material';
+import Grid from '@mui/material/Grid'; 
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const isAuthError = useSelector(authSelectors.getIsAuthError);
-
-  const handleSignupNavigate = () => {
-    navigate('/users/signup');
-  };
 
   const handleLogin = e => {
     e.preventDefault();
@@ -25,36 +20,46 @@ const Login = () => {
 
   return (
     <div>
-      <h1> Please login!</h1>
-
-      <form onSubmit={handleLogin}>
-        <label>
-          {' '}
-          Enter your email
-          <input
+      <Box sx={{ width: '450px' }}>
+        <form autoComplete="off" onSubmit={handleLogin}>
+          <h2>Login Form</h2>
+          <TextField
+            required
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            placeholder="Please enter your email"
+            sx={{ mb: 3 }}
+            label="Enter your email"
             type="email"
             name="email"
-            placeholder="Please enter your email"
             value={email}
             onChange={event => setEmail(event.target.value)}
-          ></input>
-        </label>
-        <label>
-          Enter your password
-          <input
+          />
+
+          <TextField
             type="password"
             name="password"
             placeholder="Please enter your password"
             value={password}
             onChange={event => setPassword(event.target.value)}
-          ></input>
-        </label>
-        <button type="submit">Login</button>
-        {isAuthError && <div>Error occurred while logging in</div>}
-      </form>
-      <button type="button" onClick={handleSignupNavigate}>
-        Go to register page
-      </button>
+            label="Enter your password"
+            required
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            sx={{ mb: 3 }}
+          />
+          <Button
+            sx={{ width: '450px' }}
+            variant="outlined"
+            color="secondary"
+            type="submit"
+          >
+            Login
+          </Button>
+        </form>
+      </Box>
     </div>
   );
 };
