@@ -4,14 +4,11 @@ import { NavLink } from 'react-router-dom';
 import authSelectors from 'redux/auth/auth-selectors';
 import styled from 'styled-components';
 import { Box, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   const StyledLink = styled(NavLink)`
-    color: #fff;
-
     &.active {
-      color: orange;
+      text-decoration: underline;
     }
   `;
 

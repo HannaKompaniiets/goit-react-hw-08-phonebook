@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import css from './form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from 'redux/selectors';
 import { addContact } from 'redux/operations';
+import { Box, Button, TextField } from '@mui/material';
 
 const Form = () => {
   const [name, setName] = useState('');
@@ -17,7 +17,7 @@ const Form = () => {
         setName(event.currentTarget.value);
         break;
       case 'number':
-    setNumber(event.currentTarget.value);
+        setNumber(event.currentTarget.value);
         break;
       default:
         break;
@@ -48,41 +48,38 @@ const Form = () => {
   };
 
   return (
-    <form className={css.form} onSubmit={contactButtonSubmit}>
-      <label className={css.label_name}>
-        {' '}
-        Name
-        <input
-          className={css.intup}
-          value={name}
-          onChange={handleInputChange}
+    <Box sx={{ width: '360px' }}>
+      <form onSubmit={contactButtonSubmit}>
+        <TextField
           type="text"
           name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-        />
-      </label>
-
-      <label className={css.label_name}>
-        {' '}
-        Number
-        <input
-          className={css.intup}
-          value={number}
+          value={name}
           onChange={handleInputChange}
+          label="Contact name"
+          required
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          sx={{ mb: 2 }}
+        />
+        <TextField
           type="tel"
           name="number"
-          // pattern="\+?\d{1,4}?[\-.\s]?\(?\d{1,3}?\)?[\-.\s]?\d{1,4}[\-.\s]?\d{1,4}[\-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          value={number}
+          onChange={handleInputChange}
+          label="Contact number"
           required
+          // variant="outlined"
+          color="secondary"
+          fullWidth
+          sx={{ mb: 2 }}
         />
-      </label>
-      <button className={css.button_add} type="submit">
-        {' '}
-        Add contact
-      </button>
-    </form>
+
+        <Button variant="contained" color="secondary" type="submit">
+          Add contact
+        </Button>
+      </form>
+    </Box>
   );
 };
 

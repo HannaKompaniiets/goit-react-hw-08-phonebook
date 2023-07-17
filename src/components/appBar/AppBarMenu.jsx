@@ -1,4 +1,4 @@
-import { React} from 'react';
+import { React } from 'react';
 import Navigation from './Navigation';
 import AuthNavigation from './AuthNavigation';
 import { UserInfo } from './UserInfo/UserInfo';
@@ -11,10 +11,8 @@ const AppBarMenu = () => {
 
   return (
     <header className={css.menu}>
-      {/* <Grid container spacing={ 1} rowSpacing={2}> */}
       <Navigation />
       {!isLoggedIn ? <AuthNavigation /> : <UserInfo />}
-      {/* </Grid> */}
     </header>
   );
 };

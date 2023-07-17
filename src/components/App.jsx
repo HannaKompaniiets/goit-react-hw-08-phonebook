@@ -1,4 +1,4 @@
-import { Route, Routes, createBrowserRouter } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import { fetchCurrentUser } from '../redux/auth/auth-operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, lazy } from 'react';

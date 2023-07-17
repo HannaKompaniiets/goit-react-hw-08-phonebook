@@ -1,15 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import { logIn } from '../redux/auth/auth-operations';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { Box, Button, TextField } from '@mui/material';
-import Grid from '@mui/material/Grid'; 
 
 const Login = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
 
   const handleLogin = e => {
     e.preventDefault();
@@ -22,7 +19,7 @@ const Login = () => {
     <div>
       <Box sx={{ width: '450px' }}>
         <form autoComplete="off" onSubmit={handleLogin}>
-          <h2>Login Form</h2>
+          <h2>Please login</h2>
           <TextField
             required
             variant="outlined"

@@ -1,21 +1,18 @@
-import { React} from 'react';
+import { React } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 const AuthNavigation = () => {
   const StyledLink = styled(NavLink)`
-    color: #fff;
-
     &.active {
-      color: orange;
+      text-decoration: underline;
     }
   `;
 
   const navItems = [
-    {label: "Login", link: "/users/login"},
-    {label: "Sign UP", link: "/users/signup"}
+    { label: 'Login', link: '/users/login' },
+    { label: 'Sign UP', link: '/users/signup' },
   ];
 
   return (

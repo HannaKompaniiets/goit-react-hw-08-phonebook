@@ -1,22 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { register } from '../redux/auth/auth-operations';
-import { useNavigate } from 'react-router-dom';
-import authSelectors from 'redux/auth/auth-selectors';
 import { useState } from 'react';
 import { Box, Button, TextField } from '@mui/material';
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const isAuthError = useSelector(authSelectors.getIsAuthError);
-
-  const handleLoginNavigate = () => {
-    navigate('/users/login');
-  };
 
   const handleRegister = e => {
     e.preventDefault();
